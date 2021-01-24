@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.noe.manager.meetingroom.entity.MeetingRoom;
 
 public interface MeetingRoomRepository extends JpaRepository<MeetingRoom, Long>{
-	public MeetingRoom findById(long id);
+	
 	public List<MeetingRoom> findByName(String name);
 	public List<MeetingRoom> findByAvailableFrom(LocalTime availableFrom);
 	public List<MeetingRoom> findByAvailableUntil(LocalTime availableUntil);

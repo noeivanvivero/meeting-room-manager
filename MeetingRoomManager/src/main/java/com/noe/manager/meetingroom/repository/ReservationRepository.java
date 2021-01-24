@@ -15,16 +15,15 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.noe.manager.meetingroom.entity.MeetingRoom;
 import com.noe.manager.meetingroom.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long>{
-	public Reservation findById(long id);
+
 	public List<Reservation> findByDate(LocalDate date);
 	public List<Reservation> findByRoom(MeetingRoom room);
 	public List<Reservation> findByReservedFor(String reservedFor);
 	public List<Reservation> findByReservedFrom(LocalTime reservedFrom);
 	public List<Reservation> findByReservedUntil(LocalTime reservedUntil);
-	
+	public List<Reservation> findByRoomAndDate(MeetingRoom room, LocalDate date);
 }
