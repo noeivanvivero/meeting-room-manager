@@ -21,6 +21,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Builder;
 import lombok.Data;
@@ -35,14 +39,20 @@ public class Reservation {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	@NotNull(message = "Reservation date cannot be empty")
 	@Column(name = "reserved_date", columnDefinition = "DATE")
 	private LocalDate date;
+	@NotNull(message = "Reservation starting time cannot be empty")
 	@Column(name = "reserved_from", columnDefinition = "TIME")
 	private LocalTime reservedFrom;
+	@NotNull(message = "Reservation finishing time cannot be empty")
 	@Column(name = "reserved_until", columnDefinition = "TIME")
 	private LocalTime reservedUntil;
+	@NotEmpty(message = "Reservation guest name cannot be empty")
 	@Column(name = "reserved_for")
 	private String reservedFor;
+	@NotNull(message = "Reservation meeting room cannot be empty")
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name="room_id")
 	private MeetingRoom room;
