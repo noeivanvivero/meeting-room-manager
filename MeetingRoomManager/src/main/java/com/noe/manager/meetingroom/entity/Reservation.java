@@ -24,7 +24,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.Builder;
 import lombok.Data;
@@ -52,8 +53,8 @@ public class Reservation {
 	@Column(name = "reserved_for")
 	private String reservedFor;
 	@NotNull(message = "Reservation meeting room cannot be empty")
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name="room_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private MeetingRoom room;
 }
