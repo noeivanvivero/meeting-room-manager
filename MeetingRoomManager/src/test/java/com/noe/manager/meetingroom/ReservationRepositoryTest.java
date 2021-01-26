@@ -120,4 +120,12 @@ public class ReservationRepositoryTest {
 		MeetingRoom room= MeetingRoom.builder().id(1L).build();
 		Assertions.assertThat(repo.findByRoomAndDate(room,LocalDate.of(2021,1,23)).size()).isEqualTo(2);
 	}
+	
+	
+	/*Test if we can find entities by room and after a date of reservation*/
+	@Test public void WhenFindByRoomAndAfterDate_ReturnsReservationList() {
+		MeetingRoom room= MeetingRoom.builder().id(1L).build();
+		List<Reservation> result = repo.findByRoomAndAfterDate(room,LocalDate.of(2021,1,23));
+		Assertions.assertThat(result.size()).isEqualTo(2);
+	}
 }

@@ -18,8 +18,17 @@ import com.noe.manager.meetingroom.entity.MeetingRoom;
 
 public interface MeetingRoomRepository extends JpaRepository<MeetingRoom, Long>{
 	
+	/**
+	 * @return A list of MeetingRooms whose name matches the @param[name] if there is no match then an empty list
+	 */
 	public List<MeetingRoom> findByName(String name);
+	/**
+	 * @return A list of MeetingRooms whose availableFrom member attribute matches the @param[availableFrom] if there is no match then an empty list
+	 */
 	public List<MeetingRoom> findByAvailableFrom(LocalTime availableFrom);
+	/**
+	 * @return A list of MeetingRooms whose availableUntil member attribute matches the @param[availableUntil] if there is no match then an empty list
+	 */
 	public List<MeetingRoom> findByAvailableUntil(LocalTime availableUntil);
 	
 }
