@@ -28,6 +28,8 @@ public interface ReservationService {
     public List<Reservation> findByReservedFrom(LocalTime time);
     public List<Reservation> findByReservedUntil(LocalTime time);
     public List<Reservation> findByReservedDate(LocalDate date);
-    public List<Reservation> findByRoom(MeetingRoom date);
+    public List<Reservation> findByRoom(MeetingRoom room);
+    public List<Reservation> findAfterDate(LocalDate date);
+    public List<Reservation> findByRoomAfterDate(MeetingRoom room, LocalDate date);
     
 }

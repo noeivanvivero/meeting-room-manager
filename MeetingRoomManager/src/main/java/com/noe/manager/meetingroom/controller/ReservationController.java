@@ -10,6 +10,8 @@
 
 package com.noe.manager.meetingroom.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,11 +50,19 @@ public class ReservationController {
 	
 	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	@GetMapping
-	public ResponseEntity<List<Reservation>> listReservation(@RequestParam(name = "roomId", required = false) Long roomId) {
+	public ResponseEntity<List<Reservation>> listReservation(@RequestParam(name = "roomId", required = false) Long roomId, @RequestParam(name = "afterDate", required = false) String afterDate) {
 		List<Reservation> reservations = new ArrayList<>();
-		if(roomId == null) reservations = service.getAllReservation();
-		else {
-			reservations = service.findByRoom(MeetingRoom.builder().id(roomId).build());
+		try {
+			if(roomId == null) {
+				if(afterDate==null) reservations = service.getAllReservation();
+				else reservations = service.findAfterDate(LocalDate.parse(afterDate));
+			}
+			else {
+				if(afterDate==null) reservations = service.findByRoom(MeetingRoom.builder().id(roomId).build());
+				else reservations = service.findByRoomAfterDate(MeetingRoom.builder().id(roomId).build(),LocalDate.parse(afterDate));
+			}
+		}catch(DateTimeParseException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 		if(reservations.isEmpty())  return ResponseEntity.noContent().build();
 		return ResponseEntity.ok(reservations);

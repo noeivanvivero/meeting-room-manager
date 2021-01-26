@@ -13,6 +13,8 @@ package com.noe.manager.meetingroom.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import com.noe.manager.meetingroom.entity.MeetingRoom;
@@ -188,6 +190,24 @@ public class ReservationServiceImplementation implements ReservationService{
 	public List<Reservation> findByRoom(MeetingRoom room) {
 		return repo.findByRoom(room);
 				
+	}
+	/**
+	 * @return A list of Reservations whose room member attribute matches the @param[room] and 
+	 * whose date member attribute is located in the present or in the future taking as reference
+	 * the @param[date] if there is no match then an empty list
+	 */
+	@Override
+	public List<Reservation> findByRoomAfterDate(MeetingRoom room,LocalDate date){
+		return repo.findByRoomAndAfterDate(room, date);
+	}
+	
+	/**
+	 * @return A list of Reservations whose date member attribute is located in the present or 
+	 * in the future taking as reference the @param[date] if there is no match then an empty list
+	 */
+	@Query("SELECT r FROM Reservation r WHERE r.date >= ?1")
+	public List<Reservation> findAfterDate(LocalDate date){
+		return repo.findAfterDate(date);
 	}
 
 }

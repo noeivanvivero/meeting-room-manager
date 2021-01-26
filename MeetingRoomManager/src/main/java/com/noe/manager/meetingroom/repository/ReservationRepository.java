@@ -56,4 +56,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 	 */
 	@Query("SELECT r FROM Reservation r WHERE r.date >= ?2 and r.room = ?1")
 	public List<Reservation> findByRoomAndAfterDate(MeetingRoom room, LocalDate date);
+	
+	/**
+	 * @return A list of Reservations whose date member attribute is located in the present or 
+	 * in the future taking as reference the @param[date] if there is no match then an empty list
+	 */
+	@Query("SELECT r FROM Reservation r WHERE r.date >= ?1")
+	public List<Reservation> findAfterDate(LocalDate date);
 }
