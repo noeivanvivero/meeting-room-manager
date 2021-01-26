@@ -81,7 +81,7 @@ public class MeetingRoomRepositoryTest {
 		toBeEdited.setAvailableFrom(LocalTime.of(8, 0, 0));
 		toBeEdited.setAvailableUntil(LocalTime.of(22, 59, 59));
 		repo.save(toBeEdited);
-		MeetingRoom afterEdition = repo.findById(id);
+		MeetingRoom afterEdition = repo.findById(id).orElse(null);
 		Assertions.assertThat(afterEdition.getName()).isEqualTo("New Name");
 		Assertions.assertThat(afterEdition.getDescription()).isEqualTo("New Description");
 		Assertions.assertThat(afterEdition.getAvailableFrom()).isEqualTo(LocalTime.of(8, 0, 0));
@@ -89,8 +89,8 @@ public class MeetingRoomRepositoryTest {
 	}
 	/*Test if we can find entities by id*/
 	@Test public void WhenFindById_ReturnsMeetingRoomList() {
-		Assertions.assertThat(repo.findById(1)).isNotNull();
-		Assertions.assertThat(repo.findById(100)).isNull();
+		Assertions.assertThat(repo.findById(1L).orElse(null)).isNotNull();
+		Assertions.assertThat(repo.findById(100L).orElse(null)).isNull();
 	}
 	/*Test if we can find entities by name*/
 	@Test public void WhenFindByName_ReturnsMeetingRoomList() {

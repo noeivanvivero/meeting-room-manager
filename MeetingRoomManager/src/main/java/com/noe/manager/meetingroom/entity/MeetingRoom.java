@@ -11,15 +11,15 @@
 package com.noe.manager.meetingroom.entity;
 
 import java.time.LocalTime;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,12 +34,15 @@ public class MeetingRoom {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	@NotEmpty(message = "Meeting room name cannot be empty")
 	private String name;
+	
 	private String description;
+	@NotNull(message = "Meeting room first available hour cannot be empty")
 	@Column(name = "available_from", columnDefinition = "TIME")
 	private LocalTime availableFrom;
+	@NotNull(message = "Meeting room first available hour cannot be empty")
 	@Column(name = "available_until", columnDefinition = "TIME")
 	private LocalTime availableUntil;
-	@OneToMany(mappedBy="room")
-	private Set<Reservation> reservations;
+	
 }

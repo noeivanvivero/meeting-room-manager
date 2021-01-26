@@ -1,6 +1,6 @@
 /**
-* <h1>Class name</h1>
-* Description:
+* <h1>ReservationRepositoryTest</h1>
+* Description: Unit tests for the Reservation repository
 *
 * @author  Noe Ivan
 * @version 1.0
@@ -82,7 +82,7 @@ public class ReservationRepositoryTest {
 		toBeEdited.setReservedFor("New guest");
 		toBeEdited.setRoom(MeetingRoom.builder().id(1L).build());
 		repo.save(toBeEdited);
-		Reservation afterEdition = repo.findById(id);
+		Reservation afterEdition = repo.findById(id).orElse(null);
 		Assertions.assertThat(afterEdition.getDate()).isEqualTo(LocalDate.of(2022, 1, 24));
 		Assertions.assertThat(afterEdition.getReservedFrom()).isEqualTo(LocalTime.of(16, 0, 0));
 		Assertions.assertThat(afterEdition.getReservedUntil()).isEqualTo(LocalTime.of(18, 59, 0));
@@ -90,8 +90,8 @@ public class ReservationRepositoryTest {
 	}
 	/*Test if we can find entities by id*/
 	@Test public void WhenFindById_ReturnsReservationList() {
-		Assertions.assertThat(repo.findById(1)).isNotNull();
-		Assertions.assertThat(repo.findById(100)).isNull();
+		Assertions.assertThat(repo.findById(1L).orElse(null)).isNotNull();
+		Assertions.assertThat(repo.findById(100L).orElse(null)).isNull();
 	}
 	/*Test if we can find entities by reservation guest*/
 	@Test public void WhenFindByReservedFor_ReturnsReservationList() {
@@ -113,5 +113,19 @@ public class ReservationRepositoryTest {
 	@Test public void WhenFindByDate_ReturnsReservationList() {
 		Assertions.assertThat(repo.findByDate(LocalDate.of(2021,1,23)).size()).isGreaterThanOrEqualTo(6);
 		Assertions.assertThat(repo.findByDate(LocalDate.of(2021,12,25))).isEmpty();
+	}
+	
+	/*Test if we can find entities by date and room of reservation*/
+	@Test public void WhenFindByDateAndRoom_ReturnsReservationList() {
+		MeetingRoom room= MeetingRoom.builder().id(1L).build();
+		Assertions.assertThat(repo.findByRoomAndDate(room,LocalDate.of(2021,1,23)).size()).isEqualTo(2);
+	}
+	
+	
+	/*Test if we can find entities by room and after a date of reservation*/
+	@Test public void WhenFindByRoomAndAfterDate_ReturnsReservationList() {
+		MeetingRoom room= MeetingRoom.builder().id(1L).build();
+		List<Reservation> result = repo.findByRoomAndAfterDate(room,LocalDate.of(2021,1,23));
+		Assertions.assertThat(result.size()).isEqualTo(2);
 	}
 }
