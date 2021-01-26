@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.noe.manager.meetingroom.entity.MeetingRoom;
 import com.noe.manager.meetingroom.entity.Reservation;
+import com.noe.manager.meetingroom.repository.MeetingRoomRepository;
 import com.noe.manager.meetingroom.repository.ReservationRepository;
 import com.noe.manager.meetingroom.service.ReservationService;
 import com.noe.manager.meetingroom.service.ReservationServiceImplementation;
@@ -33,6 +34,9 @@ import com.noe.manager.meetingroom.service.ReservationServiceImplementation;
 public class ReservationServiceImplementationTest {
 	@Mock
 	private ReservationRepository repo;
+	@Mock
+	private MeetingRoomRepository repoMeetingRoom;
+	
 	private ReservationService service;
 	
 	MeetingRoom newRoom01;
@@ -52,7 +56,7 @@ public class ReservationServiceImplementationTest {
 	
 	@BeforeEach
 	public void setup() {
-		service = new ReservationServiceImplementation(repo);
+		service = new ReservationServiceImplementation(repo,repoMeetingRoom);
 		newRoom01 = MeetingRoom.builder()
 				.id(1L)
 				.name("ServiceTestRoom01")
@@ -207,8 +211,14 @@ public class ReservationServiceImplementationTest {
 	}
 	@Test
 	public void WhenCreatingValidReservationThenReturnEntity() {
+		reservation05.setDate(LocalDate.now());
+		reservation05.setReservedFrom(LocalTime.now());
+		reservation05.setReservedUntil(LocalTime.now().plusHours(2));
 		Reservation testReservation = service.createReservation(reservation05);
 		Assertions.assertThat(testReservation.getId()).isEqualTo(5L);
+		reservation06.setDate(LocalDate.now());
+		reservation06.setReservedFrom(LocalTime.now());
+		reservation06.setReservedUntil(LocalTime.now().plusHours(2));
 		testReservation = service.createReservation(reservation06);
 		Assertions.assertThat(testReservation.getId()).isEqualTo(6L);
 	}

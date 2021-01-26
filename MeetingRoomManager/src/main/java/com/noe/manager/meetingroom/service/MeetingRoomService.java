@@ -23,4 +23,5 @@ public interface MeetingRoomService {
     public List<MeetingRoom> findByName(String name);
     public List<MeetingRoom> findByAvailableFrom(LocalTime time);
     public List<MeetingRoom> findByAvailableUntil(LocalTime time);
+    public List<MeetingRoom> findCurrentlyAvailable();
 }

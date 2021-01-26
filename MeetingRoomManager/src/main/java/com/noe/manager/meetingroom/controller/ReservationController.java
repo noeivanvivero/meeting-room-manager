@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,7 @@ public class ReservationController {
 	@Autowired 
 	private ReservationService service;
 	
+	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	@GetMapping
 	public ResponseEntity<List<Reservation>> listReservation(@RequestParam(name = "roomId", required = false) Long roomId) {
 		List<Reservation> reservations = new ArrayList<>();
@@ -55,6 +57,7 @@ public class ReservationController {
 		if(reservations.isEmpty())  return ResponseEntity.noContent().build();
 		return ResponseEntity.ok(reservations);
 	}
+	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Reservation> getReservation(@PathVariable("id") Long id) {
 		Reservation reservation = service.getReservation(id);
@@ -63,26 +66,30 @@ public class ReservationController {
 		}
 		return ResponseEntity.ok(reservation);
 	}
-
+	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	@PostMapping
 	public ResponseEntity<Reservation> createReservation(@Valid @RequestBody Reservation reservation, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
 		}
 		Reservation reservationDB = service.createReservation(reservation);
+		if(reservationDB == null) return ResponseEntity.unprocessableEntity().build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(reservationDB);
 	}
-
+	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Reservation> updateReservation(@PathVariable("id") Long id, @RequestBody Reservation reservation) {
+	public ResponseEntity<Reservation> updateReservation(@PathVariable("id") Long id,@Valid @RequestBody Reservation reservation, BindingResult result) {
+		if (result.hasErrors()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
+		}
 		reservation.setId(id);
 		Reservation reservationDB = service.updateReservation(reservation);
 		if (reservationDB == null) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.unprocessableEntity().build();
 		}
 		return ResponseEntity.ok(reservationDB);
 	}
-
+	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Reservation> deleteReservation(@PathVariable("id") Long id) {
 		Reservation reservationDeleted = service.deleteReservation(id);
@@ -91,7 +98,7 @@ public class ReservationController {
 		}
 		return ResponseEntity.ok(reservationDeleted);
 	}
-
+	
 	private String formatMessage(BindingResult result) {
 		List<Map<String, String>> errors = result.getFieldErrors().stream().map(err -> {
 			Map<String, String> error = new HashMap<>();

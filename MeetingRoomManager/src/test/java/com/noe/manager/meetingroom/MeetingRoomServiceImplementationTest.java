@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.noe.manager.meetingroom.entity.MeetingRoom;
 import com.noe.manager.meetingroom.repository.MeetingRoomRepository;
+import com.noe.manager.meetingroom.repository.ReservationRepository;
 import com.noe.manager.meetingroom.service.MeetingRoomService;
 import com.noe.manager.meetingroom.service.MeetingRoomServiceImplementation;
 
@@ -32,6 +33,9 @@ import com.noe.manager.meetingroom.service.MeetingRoomServiceImplementation;
 public class MeetingRoomServiceImplementationTest {
 	@Mock
 	private MeetingRoomRepository repo;
+	@Mock
+	private ReservationRepository repoReservations;
+	
 	private MeetingRoomService service;
 	
 	MeetingRoom newRoom01;
@@ -39,7 +43,7 @@ public class MeetingRoomServiceImplementationTest {
 	
 	@BeforeEach
 	public void setup() {
-		service = new MeetingRoomServiceImplementation(repo);
+		service = new MeetingRoomServiceImplementation(repo, repoReservations);
 		newRoom01 = MeetingRoom.builder()
 				.id(1L)
 				.name("ServiceTestRoom01")
